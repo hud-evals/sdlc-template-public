@@ -1,0 +1,14 @@
+[
+  {
+    "id": "team-001",
+    "name": "Platform",
+    "key": "PLT",
+    "description": "Platform and user services team",
+    "icon": null,
+    "color": null,
+    "private": false,
+    "timezone": "America/New_York",
+    "createdAt": "2025-02-01T10:00:00.000Z",
+    "updatedAt": "2026-02-10T08:00:00.000Z"
+  }
+]

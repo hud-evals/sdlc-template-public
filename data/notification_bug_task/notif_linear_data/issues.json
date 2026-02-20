@@ -1,0 +1,19 @@
+[
+  {
+    "id": "issue-042",
+    "identifier": "PLT-42",
+    "title": "Task assignment notifications not being delivered",
+    "description": "## Bug Report\n\nWhen assigning a task to a user via the API, the assignment notification is not being sent. Other notification types (task creation, status changes) work correctly.\n\n### Steps to Reproduce\n1. Create a task: `POST /api/tasks` with `{\"title\": \"Test task\"}`\n2. Assign it: `PATCH /api/tasks/{id}` with `{\"assignee_id\": \"user-123\"}`\n3. Check notifications: `GET /api/notifications`\n4. No assignment notification appears, but task creation notification was sent\n\n### Expected\nNotification with type assignment should appear in the notification log.\n\n### Actual\nNo notification for assignment. No errors in logs.\n\n### Context\n- This started after the timezone refactor was merged (see GitHub Issue #5)\n- Task creation notifications still work fine\n- The notification service appears healthy — no errors anywhere\n- We suspect something changed in how events are processed after the refactor\n\n### Acceptance Criteria\n- Task assignment notifications are delivered\n- Existing notification types continue to work\n- Fix the root cause, create a PR on GitHub",
+    "priority": 1,
+    "url": "https://linear.app/plt/issue/PLT-42",
+    "createdAt": "2026-02-12T14:00:00.000Z",
+    "updatedAt": "2026-02-13T09:30:00.000Z",
+    "completedAt": null,
+    "state": {"id": "state-003", "name": "In Progress", "type": "started", "color": "#f2c94c"},
+    "assignee": {"id": "user-001", "name": "Agent Bot", "email": "agent@example.com"},
+    "team": {"id": "team-001", "name": "Platform", "key": "PLT"},
+    "project": null,
+    "labels": {"nodes": [{"id": "label-001", "name": "Bug", "color": "#eb5757"}, {"id": "label-002", "name": "P1", "color": "#f2994a"}]},
+    "comments": {"nodes": []}
+  }
+]

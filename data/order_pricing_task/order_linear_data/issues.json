@@ -1,0 +1,37 @@
+[
+  {
+    "id": "issue-001",
+    "identifier": "COM-15",
+    "number": 15,
+    "title": "Discounted order totals are incorrect",
+    "description": "## Bug Report\n\nCustomers are being charged incorrect amounts when using discount codes.\n\n### Example\n\n- Cart: 2x Widget ($25.00 each) = $50.00 subtotal\n- Discount code: SAVE10 (10% off)\n- Tax: 8%\n- **Expected total: $48.60**\n- **Actual total: $49.14**\n\nWe've also had reports of discount amounts being a penny off. For example, 10% of $49.99 shows as $4.99 instead of $5.00.\n\n### What we've tried\n\n- Verified the discount code config is correct (SAVE10 = 10%)\n- Verified the tax rate is correct (8%)\n- The pricing pipeline was refactored recently for EU compliance (GitHub Issue #12) — the team reviewed the changes and believes they are correct\n- GitHub Issue #15 and #18 have more investigation details\n\n### Impact\n\n- All orders with percentage-based discount codes are overcharged\n- Customer complaints increasing, refund requests piling up\n\n### Acceptance Criteria\n\n- Order totals must match the expected calculation\n- All discount types (percentage and flat) must produce correct amounts\n- Fix the root cause(s) and create a PR on GitHub",
+    "priority": 1,
+    "priorityLabel": "Urgent",
+    "state": {
+      "id": "state-003",
+      "name": "In Progress",
+      "type": "started"
+    },
+    "assignee": {
+      "id": "user-001",
+      "name": "Agent Bot",
+      "displayName": "Agent"
+    },
+    "team": {
+      "id": "team-001",
+      "name": "Commerce",
+      "key": "COM"
+    },
+    "labels": [
+      {"id": "label-001", "name": "Bug", "color": "#eb5757"},
+      {"id": "label-002", "name": "P1", "color": "#f2994a"},
+      {"id": "label-003", "name": "Pricing", "color": "#27ae60"}
+    ],
+    "createdAt": "2026-02-01T10:00:00Z",
+    "updatedAt": "2026-02-12T14:30:00Z",
+    "startedAt": "2026-02-12T14:30:00Z",
+    "completedAt": null,
+    "canceledAt": null,
+    "url": "https://linear.app/acme-corp/issue/COM-15"
+  }
+]

@@ -1,0 +1,68 @@
+[
+  {
+    "number": 5,
+    "title": "Refactor datetime handling to use UTC consistently",
+    "body": "## Summary\n\nAll datetime handling across the codebase should use UTC consistently. Currently there's a mix of naive datetimes (`datetime.now()`) and timezone-aware ones, which leads to subtle bugs in scheduling and event ordering.\n\n### Changes\n- Replace all `datetime.now()` calls with `datetime.now(timezone.utc)`\n- Standardize ISO format string in `config.py` to include timezone offset\n- Update `event_bus.py` timestamp generation to use the new format\n- Update `notification_service.py` timestamp parsing to accept both old and new formats\n\n### Testing\n- All existing tests pass\n- Added new tests for timezone-aware datetime serialization",
+    "state": "closed",
+    "labels": [{"name": "refactor"}, {"name": "merged"}],
+    "assignees": [{"login": "alex-dev"}],
+    "user": {"login": "alex-dev"},
+    "created_at": "2026-02-05T09:00:00Z",
+    "updated_at": "2026-02-08T16:30:00Z",
+    "closed_at": "2026-02-08T16:30:00Z",
+    "html_url": "https://github.com/acme-corp/task-manager/issues/5",
+    "comments": 2,
+    "comment_data": [
+      {
+        "id": 501,
+        "user": {"login": "alex-dev"},
+        "body": "Updated all `datetime.now()` calls to `datetime.now(timezone.utc)`. Also standardized the ISO format string in `config.py` — it now uses `%Y-%m-%dT%H:%M:%S%z` instead of the old `%Y-%m-%dT%H:%M:%S`. The event bus and notification service both reference this format from config now instead of hardcoding it.\n\nI also touched `event_bus.py` to clean up how event payloads are constructed — the timestamp field, the event type delimiter, and the metadata dict all got tidied up while I was in there.",
+        "created_at": "2026-02-07T11:20:00Z",
+        "updated_at": "2026-02-07T11:20:00Z"
+      },
+      {
+        "id": 502,
+        "user": {"login": "sarah-dev"},
+        "body": "LGTM. Verified all tests pass after the format string changes. The notification service correctly parses both the old and new timestamp formats, so existing events won't break. Merging.",
+        "created_at": "2026-02-08T16:25:00Z",
+        "updated_at": "2026-02-08T16:25:00Z"
+      }
+    ]
+  },
+  {
+    "number": 8,
+    "title": "Task assignment notifications not being delivered",
+    "body": "## Bug Report\n\nUsers report not receiving notifications when tasks are assigned to them. Task creation notifications work fine. This started after the timezone refactor was merged (Issue #5).\n\n### Steps to Reproduce\n1. Create a task via `POST /api/tasks`\n2. Assign the task to a user via `PATCH /api/tasks/{id}` with `{\"assignee_id\": \"user-123\"}`\n3. Query notifications via `GET /api/notifications`\n4. The task creation notification appears, but no assignment notification\n\n### Expected\nA notification of type `assignment` should appear when a task is assigned.\n\n### Actual\nNo assignment notification is generated. No errors in application logs.\n\n### Notes\n- This was first reported on Feb 10, two days after the timezone refactor (#5) was merged\n- Task creation, status change, and comment notifications all work correctly\n- Only assignment notifications are affected\n- The notification service health endpoint returns healthy, no error logs anywhere",
+    "state": "open",
+    "labels": [{"name": "bug"}, {"name": "P1"}],
+    "assignees": [],
+    "user": {"login": "sarah-dev"},
+    "created_at": "2026-02-10T14:00:00Z",
+    "updated_at": "2026-02-13T09:45:00Z",
+    "html_url": "https://github.com/acme-corp/task-manager/issues/8",
+    "comments": 3,
+    "comment_data": [
+      {
+        "id": 801,
+        "user": {"login": "alex-dev"},
+        "body": "I've been digging into this. The notification service handles events correctly in the unit tests — when I manually push an event through the handler, notifications get created. The event is definitely being emitted by `task_service.py` on assignment; I added a debug log and confirmed the `emit()` call fires with the right payload.\n\nThe weird thing is that the event payload looks correct: it has the task ID, the assignee, and a properly formatted timestamp. But the notification never materializes. It's like the notification service receives the event but silently drops it.",
+        "created_at": "2026-02-11T10:15:00Z",
+        "updated_at": "2026-02-11T10:15:00Z"
+      },
+      {
+        "id": 802,
+        "user": {"login": "sarah-dev"},
+        "body": "Could this be related to the timezone refactor (#5)? The timestamp format changed from `%Y-%m-%dT%H:%M:%S` to `%Y-%m-%dT%H:%M:%S%z` and the event bus was touched in that PR. Maybe the notification handler is rejecting events with the new timezone-aware format?\n\nI looked at the notification service's `_should_process()` method and it does check the event metadata before processing. If the timestamp parsing fails silently, the event would just be skipped without logging an error. That would explain the \"no errors anywhere\" symptom.\n\nTimeline matches too — the refactor merged Feb 8, first report was Feb 10.",
+        "created_at": "2026-02-12T08:30:00Z",
+        "updated_at": "2026-02-12T08:30:00Z"
+      },
+      {
+        "id": 803,
+        "user": {"login": "alex-dev"},
+        "body": "Good theory, but I compared the timestamps before and after the refactor and they look valid. I tested the `_should_process()` path with both old-format and new-format timestamps and both pass through fine.\n\nI also double-checked that the notification service doesn't validate timestamps at all during event processing — it just stores whatever it receives. So the format change shouldn't cause a silent drop.\n\nOne thing I noticed: the event bus config was refactored at the same time. The `EVENT_DELIMITER` and format strings are all pulled from `config.py` now. I didn't trace every usage but the tests pass, so it should be fine. Still investigating — there's something subtle going on here.",
+        "created_at": "2026-02-13T09:45:00Z",
+        "updated_at": "2026-02-13T09:45:00Z"
+      }
+    ]
+  }
+]

@@ -1,0 +1,181 @@
+[
+  {
+    "eventID": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6",
+    "groupID": "301",
+    "title": "TypeError: 'NoneType' object is not subscriptable",
+    "culprit": "user_service.get_user_profile",
+    "dateCreated": "2026-02-18T11:45:00Z",
+    "platform": "python",
+    "level": "error",
+    "tags": [
+      {"key": "level", "value": "error"},
+      {"key": "environment", "value": "production"},
+      {"key": "server_name", "value": "api-prod-01"},
+      {"key": "runtime", "value": "CPython 3.12.3"},
+      {"key": "url", "value": "/api/users/3/profile"}
+    ],
+    "contexts": {
+      "runtime": {"name": "CPython", "version": "3.12.3"},
+      "os": {"name": "Linux", "version": "6.1.0"}
+    },
+    "entries": [
+      {
+        "type": "exception",
+        "data": {
+          "values": [
+            {
+              "type": "TypeError",
+              "value": "'NoneType' object is not subscriptable",
+              "module": "builtins",
+              "mechanism": {"type": "generic", "handled": false},
+              "stacktrace": {
+                "frames": [
+                  {
+                    "filename": "app.py",
+                    "absPath": "/home/ubuntu/workspace/sentry_fix/app.py",
+                    "module": "app",
+                    "function": "handle_profile_request",
+                    "lineNo": 24,
+                    "inApp": true,
+                    "context": [
+                      [22, "def handle_profile_request(user_id):"],
+                      [23, "    try:"],
+                      [24, "        profile = get_user_profile(user_id)"],
+                      [25, "        return json_response(profile)"],
+                      [26, "    except ValueError as e:"]
+                    ],
+                    "vars": {
+                      "user_id": "'3'"
+                    }
+                  },
+                  {
+                    "filename": "user_service.py",
+                    "absPath": "/home/ubuntu/workspace/sentry_fix/user_service.py",
+                    "module": "user_service",
+                    "function": "get_user_profile",
+                    "lineNo": 37,
+                    "inApp": true,
+                    "context": [
+                      [34, "    if not user:"],
+                      [35, "        raise ValueError(f\"User {user_id} not found\")"],
+                      [36, ""],
+                      [37, "    return {"],
+                      [38, "        \"name\": user[\"profile\"][\"display_name\"],"],
+                      [39, "        \"email\": user[\"email\"],"],
+                      [40, "        \"bio\": user[\"profile\"][\"bio\"],"]
+                    ],
+                    "vars": {
+                      "user_id": "'3'",
+                      "users_db": "{'1': {'name': 'Alice', ...}, '2': {'name': 'Bob', ...}, '3': {'name': 'Charlie', 'email': 'charlie@example.com', 'profile': None}, ...}",
+                      "user": "{'name': 'Charlie', 'email': 'charlie@example.com', 'profile': None}"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "breadcrumbs",
+        "data": {
+          "values": [
+            {
+              "category": "http",
+              "level": "info",
+              "message": "GET /api/users/3/profile",
+              "timestamp": "2026-02-18T11:44:59.800Z",
+              "type": "http",
+              "data": {
+                "method": "GET",
+                "url": "/api/users/3/profile",
+                "status_code": "200"
+              }
+            },
+            {
+              "category": "query",
+              "level": "info",
+              "message": "SELECT * FROM users WHERE id = 3",
+              "timestamp": "2026-02-18T11:44:59.850Z",
+              "type": "default"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "eventID": "b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7",
+    "groupID": "301",
+    "title": "TypeError: 'NoneType' object is not subscriptable",
+    "culprit": "user_service.get_user_profile",
+    "dateCreated": "2026-02-17T15:22:00Z",
+    "platform": "python",
+    "level": "error",
+    "tags": [
+      {"key": "level", "value": "error"},
+      {"key": "environment", "value": "production"},
+      {"key": "server_name", "value": "api-prod-02"},
+      {"key": "url", "value": "/api/users/4/profile"}
+    ],
+    "entries": [
+      {
+        "type": "exception",
+        "data": {
+          "values": [
+            {
+              "type": "TypeError",
+              "value": "'NoneType' object is not subscriptable",
+              "module": "builtins",
+              "mechanism": {"type": "generic", "handled": false},
+              "stacktrace": {
+                "frames": [
+                  {
+                    "filename": "app.py",
+                    "absPath": "/home/ubuntu/workspace/sentry_fix/app.py",
+                    "module": "app",
+                    "function": "handle_profile_request",
+                    "lineNo": 24,
+                    "inApp": true,
+                    "context": [
+                      [22, "def handle_profile_request(user_id):"],
+                      [23, "    try:"],
+                      [24, "        profile = get_user_profile(user_id)"],
+                      [25, "        return json_response(profile)"],
+                      [26, "    except ValueError as e:"]
+                    ],
+                    "vars": {
+                      "user_id": "'4'"
+                    }
+                  },
+                  {
+                    "filename": "user_service.py",
+                    "absPath": "/home/ubuntu/workspace/sentry_fix/user_service.py",
+                    "module": "user_service",
+                    "function": "get_user_profile",
+                    "lineNo": 37,
+                    "inApp": true,
+                    "context": [
+                      [34, "    if not user:"],
+                      [35, "        raise ValueError(f\"User {user_id} not found\")"],
+                      [36, ""],
+                      [37, "    return {"],
+                      [38, "        \"name\": user[\"profile\"][\"display_name\"],"],
+                      [39, "        \"email\": user[\"email\"],"],
+                      [40, "        \"bio\": user[\"profile\"][\"bio\"],"]
+                    ],
+                    "vars": {
+                      "user_id": "'4'",
+                      "users_db": "{'1': {'name': 'Alice', ...}, '2': {'name': 'Bob', ...}, '3': {'name': 'Charlie', ...}, '4': {'name': 'Diana', 'email': 'diana@example.com'}}",
+                      "user": "{'name': 'Diana', 'email': 'diana@example.com'}"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

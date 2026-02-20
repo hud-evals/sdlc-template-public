@@ -1,0 +1,32 @@
+[
+  {
+    "id": "issue-305",
+    "identifier": "ENG-305",
+    "title": "Evaluation rewards always 0.0 — agent fixes score as failures",
+    "description": "We're seeing wrong rewards from `hud eval`. Tasks complete with `reward: 0.0` even when the agent succeeds. This started after the recent eval CLI refactor.\n\nMultiple symptoms reported:\n1. `find_reward()` can't parse rewards — `structuredContent` is always None in tool results\n2. Even when rewards ARE parsed, the runner overwrites them before `EvalContext` finalizes\n3. `EvalContext.__aexit__` doesn't propagate the evaluate tool's computed reward to `self.reward`\n4. The `--full` CLI flag only sets `--all` but doesn't compose `--auto-respond` and `--max-steps 100` as documented\n5. Error logging in `find_reward` dumps the entire MCPToolResult object instead of just `structuredContent`, making debugging impossible\n\nThis blocks all evaluation work. Related GitHub issue: #340.",
+    "priority": 1,
+    "url": "https://linear.app/eng/issue/ENG-305",
+    "createdAt": "2026-02-13T09:00:00.000Z",
+    "updatedAt": "2026-02-14T11:30:00.000Z",
+    "completedAt": null,
+    "state": {"id": "state-003", "name": "In Progress", "type": "started", "color": "#f2c94c"},
+    "assignee": {"id": "user-001", "name": "Agent Bot", "email": "agent@example.com"},
+    "team": {"id": "team-001", "name": "Engineering", "key": "ENG"},
+    "project": null,
+    "labels": {"nodes": [{"id": "label-001", "name": "Bug", "color": "#eb5757"}, {"id": "label-002", "name": "P0", "color": "#ff0000"}]},
+    "comments": {"nodes": [
+      {
+        "id": "comment-001",
+        "body": "Confirmed: the structuredContent issue is in `_execute_tool` in `hud/environment/environment.py`. Both the local-tool and remote-tool code paths drop it.\n\nBut that alone doesn't explain why rewards are 0 — there's something else overriding them in the runner.",
+        "user": {"id": "user-002", "name": "Bob Engineer"},
+        "createdAt": "2026-02-13T14:20:00.000Z"
+      },
+      {
+        "id": "comment-002",
+        "body": "Found another issue: `hud/datasets/runner.py` in both `run_dataset` and `run_single_task` has `ctx.reward = result.reward`. This line runs inside the `async with` block BEFORE `__aexit__`, so it always executes before evaluate tools compute their reward during `__aexit__`. The line needs to be removed — a conditional guard like `if ctx.reward is None` won't help because `ctx.reward` IS None at that point (evaluate tools haven't run yet).\n\nAlso `EvalContext.__aexit__` itself has a bug — it never copies `_evaluate_reward` to `self.reward`. It needs to unconditionally propagate the evaluate tool reward when one is available.",
+        "user": {"id": "user-003", "name": "Alice Dev"},
+        "createdAt": "2026-02-14T08:15:00.000Z"
+      }
+    ]}
+  }
+]

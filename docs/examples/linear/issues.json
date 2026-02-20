@@ -1,0 +1,169 @@
+[
+  {
+    "id": "iss-001",
+    "identifier": "ENG-42",
+    "title": "API returns 500 on task creation with priority field",
+    "description": "When creating a new task via POST /api/v1/tasks/ with a priority field, the API returns a 500 Internal Server Error.\n\nSteps to reproduce:\n1. POST /api/v1/tasks/ with body {\"title\": \"test\", \"priority\": \"high\"}\n2. Observe 500 error\n\nExpected: Task created successfully\nActual: ProgrammingError - column tasks.priority does not exist",
+    "priority": 1,
+    "url": "https://linear.app/company/issue/ENG-42",
+    "createdAt": "2026-02-10T09:15:00.000Z",
+    "updatedAt": "2026-02-12T14:30:00.000Z",
+    "completedAt": null,
+    "state": {
+      "id": "ws-inprogress-eng",
+      "name": "In Progress",
+      "type": "started",
+      "color": "#f2c94c"
+    },
+    "assignee": {
+      "id": "user-001",
+      "name": "Alex Rivera",
+      "email": "alex@company.com"
+    },
+    "team": {
+      "id": "team-eng",
+      "name": "Engineering",
+      "key": "ENG"
+    },
+    "project": {
+      "id": "proj-001",
+      "name": "Task Tracker API",
+      "state": "started"
+    },
+    "labels": {
+      "nodes": [
+        { "id": "lbl-bug", "name": "Bug", "color": "#eb5757" },
+        { "id": "lbl-p1", "name": "P1", "color": "#eb5757" }
+      ]
+    },
+    "comments": {
+      "nodes": [
+        {
+          "id": "cmt-001",
+          "body": "This is a P1 — all task endpoints are broken. Sentry shows 147 error events in the last 24 hours. The error is `ProgrammingError: column tasks.priority does not exist`.",
+          "createdAt": "2026-02-10T09:30:00.000Z",
+          "user": { "id": "user-002", "name": "Sam Patel" }
+        },
+        {
+          "id": "cmt-002",
+          "body": "Looks like the migration for the priority column didn't run against the production database. The model has the field but the column is missing from Postgres.",
+          "createdAt": "2026-02-10T10:15:00.000Z",
+          "user": { "id": "user-001", "name": "Alex Rivera" }
+        },
+        {
+          "id": "cmt-003",
+          "body": "I checked the Alembic migration history — migration 003 (add_task_priority) shows as applied but the column definitely doesn't exist. Something is off with the migration setup.",
+          "createdAt": "2026-02-11T08:45:00.000Z",
+          "user": { "id": "user-003", "name": "Jordan Kim" }
+        }
+      ]
+    }
+  },
+  {
+    "id": "iss-002",
+    "identifier": "ENG-43",
+    "title": "Investigate Alembic migration configuration",
+    "description": "Related to ENG-42. The Alembic migration 003 appears to have run, but the priority column is missing from the database. Need to investigate if migrations are running against the correct database.",
+    "priority": 1,
+    "url": "https://linear.app/company/issue/ENG-43",
+    "createdAt": "2026-02-11T09:00:00.000Z",
+    "updatedAt": "2026-02-11T15:00:00.000Z",
+    "completedAt": null,
+    "state": {
+      "id": "ws-todo-eng",
+      "name": "Todo",
+      "type": "unstarted",
+      "color": "#e2e2e2"
+    },
+    "assignee": {
+      "id": "user-003",
+      "name": "Jordan Kim",
+      "email": "jordan@company.com"
+    },
+    "team": {
+      "id": "team-eng",
+      "name": "Engineering",
+      "key": "ENG"
+    },
+    "project": {
+      "id": "proj-001",
+      "name": "Task Tracker API",
+      "state": "started"
+    },
+    "labels": {
+      "nodes": [
+        { "id": "lbl-bug", "name": "Bug", "color": "#eb5757" },
+        { "id": "lbl-infra", "name": "Infrastructure", "color": "#95a2b3" }
+      ]
+    },
+    "comments": { "nodes": [] }
+  },
+  {
+    "id": "iss-003",
+    "identifier": "ENG-44",
+    "title": "Add input validation for task endpoints",
+    "description": "Task creation and update endpoints should validate input fields (title length, priority values, etc.).",
+    "priority": 3,
+    "url": "https://linear.app/company/issue/ENG-44",
+    "createdAt": "2026-02-08T14:00:00.000Z",
+    "updatedAt": "2026-02-08T14:00:00.000Z",
+    "completedAt": null,
+    "state": {
+      "id": "ws-backlog-eng",
+      "name": "Backlog",
+      "type": "backlog",
+      "color": "#bec2c8"
+    },
+    "assignee": null,
+    "team": {
+      "id": "team-eng",
+      "name": "Engineering",
+      "key": "ENG"
+    },
+    "project": {
+      "id": "proj-001",
+      "name": "Task Tracker API",
+      "state": "started"
+    },
+    "labels": {
+      "nodes": [
+        { "id": "lbl-feature", "name": "Feature", "color": "#5e6ad2" }
+      ]
+    },
+    "comments": { "nodes": [] }
+  },
+  {
+    "id": "iss-004",
+    "identifier": "INF-12",
+    "title": "Set up staging environment for Task Tracker",
+    "description": "Create a staging environment that mirrors production for testing deployments before release.",
+    "priority": 2,
+    "url": "https://linear.app/company/issue/INF-12",
+    "createdAt": "2026-02-05T10:00:00.000Z",
+    "updatedAt": "2026-02-09T11:30:00.000Z",
+    "completedAt": null,
+    "state": {
+      "id": "ws-inprogress-inf",
+      "name": "In Progress",
+      "type": "started",
+      "color": "#4ea7fc"
+    },
+    "assignee": {
+      "id": "user-002",
+      "name": "Sam Patel",
+      "email": "sam@company.com"
+    },
+    "team": {
+      "id": "team-inf",
+      "name": "Infrastructure",
+      "key": "INF"
+    },
+    "project": null,
+    "labels": {
+      "nodes": [
+        { "id": "lbl-infra", "name": "Infrastructure", "color": "#95a2b3" }
+      ]
+    },
+    "comments": { "nodes": [] }
+  }
+]

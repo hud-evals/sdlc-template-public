@@ -1,0 +1,10 @@
+{
+  "login": "agent-bot",
+  "name": "Agent Bot",
+  "email": "agent@example.com",
+  "id": 42,
+  "bio": "Automated engineering assistant",
+  "public_repos": 0,
+  "followers": 0,
+  "html_url": "https://github.com/agent-bot"
+}

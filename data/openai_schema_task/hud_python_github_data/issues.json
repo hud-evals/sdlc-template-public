@@ -1,0 +1,16 @@
+[
+  {
+    "number": 331,
+    "id": 33101,
+    "title": "Tool conversion tests failing intermittently",
+    "state": "open",
+    "user": {"login": "alice-eng", "id": 80001, "type": "User"},
+    "labels": [{"id": 4001, "name": "bug", "color": "d73a4a"}],
+    "body": "Some of our tests around LLM provider tool formatting have started failing. It seems like the tool definitions get corrupted somehow — the schemas look different the second time they're accessed. Not sure if this is a test isolation issue or something in the conversion logic itself.",
+    "created_at": "2026-02-12T15:00:00Z",
+    "updated_at": "2026-02-12T15:00:00Z",
+    "html_url": "https://github.com/acme-corp/hud-sdk/issues/331",
+    "comments": 0,
+    "comments_data": []
+  }
+]

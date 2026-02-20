@@ -1,0 +1,19 @@
+[
+  {
+    "id": "issue-201",
+    "identifier": "ENG-201",
+    "title": "CI tests failing after recent SDK changes",
+    "description": "Our integration test suite started failing after the latest round of changes to the SDK. The tests that convert tools for different LLM providers are intermittently broken — some pass on the first run but fail when the suite runs the full batch.\n\nWe're not sure what changed but it started after the recent strict mode work was merged. Can someone investigate?",
+    "priority": 2,
+    "url": "https://linear.app/eng/issue/ENG-201",
+    "createdAt": "2026-02-12T14:30:00.000Z",
+    "updatedAt": "2026-02-12T14:30:00.000Z",
+    "completedAt": null,
+    "state": {"id": "state-003", "name": "In Progress", "type": "started", "color": "#f2c94c"},
+    "assignee": {"id": "user-001", "name": "Agent Bot", "email": "agent@example.com"},
+    "team": {"id": "team-001", "name": "Engineering", "key": "ENG"},
+    "project": null,
+    "labels": {"nodes": [{"id": "label-001", "name": "Bug", "color": "#eb5757"}]},
+    "comments": {"nodes": []}
+  }
+]

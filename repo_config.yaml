@@ -1,0 +1,34 @@
+repos:
+  coding-template-sample:
+    repo_url: https://github.com/hud-evals/coding-template-sample
+    branches:
+      - server_fix_baseline
+      - server_fix_test
+      - server_fix_golden
+      - webhook_bug_baseline
+      - webhook_bug_test
+      - webhook_bug_golden
+      - notif_bug_baseline
+      - notif_bug_test
+      - notif_bug_golden
+      - order_bug_baseline
+      - order_bug_test
+      - order_bug_golden
+      - settings_bug_baseline
+      - settings_bug_test
+      - settings_bug_golden
+      - settings_v2_baseline
+      - settings_v2_test
+      - settings_v2_golden
+      - sentry_fix_baseline
+      - sentry_fix_test
+      - sentry_fix_golden
+  sdlc-tasks-data:
+    repo_url: https://github.com/hud-evals/sdlc-tasks-data
+    branches:
+      - openai_schema_baseline
+      - openai_schema_test
+      - openai_schema_golden
+      - eval_reward_baseline
+      - eval_reward_test
+      - eval_reward_golden

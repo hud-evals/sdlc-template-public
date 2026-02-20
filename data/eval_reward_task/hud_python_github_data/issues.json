@@ -1,0 +1,23 @@
+[
+  {
+    "number": 340,
+    "id": 34001,
+    "title": "structuredContent missing from tool results in _execute_tool",
+    "state": "open",
+    "user": {"login": "bob-eng", "id": 80002, "type": "User"},
+    "labels": [{"id": 4001, "name": "bug", "color": "d73a4a"}],
+    "body": "When running evaluations locally, `find_reward()` can't parse the reward because `structuredContent` is always `None`. The tool returns it but `_execute_tool` drops it when building `MCPToolResult`.\n\nReproducible with any scenario that uses `structuredContent` for grading. The evaluate tool returns `{\"reward\": 0.85}` as structured content but `find_reward` sees `None`.\n\nI think `_execute_tool` in `environment.py` is constructing the `MCPToolResult` without passing through `structuredContent` from the underlying result.",
+    "created_at": "2026-02-14T10:00:00Z",
+    "updated_at": "2026-02-14T10:00:00Z",
+    "html_url": "https://github.com/acme-corp/hud-sdk/issues/340",
+    "comments": 1,
+    "comments_data": [
+      {
+        "id": 50001,
+        "user": {"login": "alice-eng", "id": 80001, "type": "User"},
+        "body": "This might be related to the reward pipeline issue tracked in Linear (ENG-305). We're also seeing `--full` not working correctly and remote evals silently failing.",
+        "created_at": "2026-02-14T11:30:00Z"
+      }
+    ]
+  }
+]

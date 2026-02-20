@@ -1,0 +1,11 @@
+{
+  "id": 2,
+  "name": "task-manager",
+  "full_name": "acme-corp/task-manager",
+  "description": "Internal task management API",
+  "default_branch": "notif_bug_baseline",
+  "private": true,
+  "html_url": "https://github.com/acme-corp/task-manager",
+  "language": "Python",
+  "topics": ["api", "python", "tasks"]
+}

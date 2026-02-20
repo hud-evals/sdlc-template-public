@@ -1,0 +1,7 @@
+{
+  "login": "agent-bot",
+  "id": 90001,
+  "type": "User",
+  "name": "Agent Bot",
+  "email": "agent@example.com"
+}

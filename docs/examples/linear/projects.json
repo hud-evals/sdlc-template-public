@@ -1,0 +1,36 @@
+[
+  {
+    "id": "proj-001",
+    "name": "Task Tracker API",
+    "description": "FastAPI-based task tracker application with PostgreSQL backend.",
+    "slugId": "task-tracker-api",
+    "icon": "📋",
+    "color": "#5e6ad2",
+    "state": "started",
+    "progress": 0.6,
+    "health": "atRisk",
+    "priority": 1,
+    "url": "https://linear.app/company/project/task-tracker-api",
+    "startDate": "2026-01-01",
+    "targetDate": "2026-03-31",
+    "lead": {
+      "id": "user-001",
+      "name": "Alex Rivera",
+      "email": "alex@company.com"
+    },
+    "teams": {
+      "nodes": [
+        { "id": "team-eng", "name": "Engineering", "key": "ENG" }
+      ]
+    },
+    "members": {
+      "nodes": [
+        { "id": "user-001", "name": "Alex Rivera" },
+        { "id": "user-002", "name": "Sam Patel" },
+        { "id": "user-003", "name": "Jordan Kim" }
+      ]
+    },
+    "createdAt": "2025-12-01T10:00:00.000Z",
+    "updatedAt": "2026-02-12T10:00:00.000Z"
+  }
+]

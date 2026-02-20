@@ -1,0 +1,93 @@
+[
+  {
+    "id": "issue-001",
+    "identifier": "PLT-31",
+    "title": "Webhook notification channel contamination across events",
+    "description": "Multiple user reports of notifications being delivered to wrong channels. See GitHub issues #42 and #45 on acme-corp/webhook-service.\n\n**Symptoms:**\n- Users receive Slack notifications even though they only have email enabled\n- The problem is intermittent — not every webhook event triggers wrong channels\n- Restarting the service clears the issue temporarily, but it comes back under load\n\n**Suspected area:** Something in the notification dispatch path is leaking channel preferences between users or between webhook events. Could be shared mutable state that isn't being reset properly.\n\n**Repro hint:** Process two webhook events for different users back-to-back. The second user sometimes inherits notification channels from the first.",
+    "priority": 1,
+    "state": {
+      "id": "state-003",
+      "name": "In Progress",
+      "type": "started"
+    },
+    "team": {
+      "id": "team-001",
+      "name": "Platform",
+      "key": "PLT"
+    },
+    "assignee": null,
+    "creator": {
+      "id": "user-001",
+      "name": "Agent Bot"
+    },
+    "project": {
+      "id": "project-001",
+      "name": "Webhook Reliability"
+    },
+    "labels": {
+      "nodes": [
+        {"id": "label-001", "name": "Bug", "color": "#eb5757"}
+      ]
+    },
+    "createdAt": "2026-02-12T11:00:00.000Z",
+    "updatedAt": "2026-02-12T15:30:00.000Z",
+    "url": "https://linear.app/acme-corp/issue/PLT-31",
+    "comments": {
+      "nodes": [
+        {
+          "id": "comment-001",
+          "body": "I looked at the webhook handler and the notification builder shares a single context dict across the dispatch loop. When we iterate over recipients, the `channels` list from the previous iteration might carry over if the next user has no explicit channel override. Classic mutation-in-a-loop bug.",
+          "createdAt": "2026-02-12T14:20:00.000Z",
+          "user": {
+            "id": "user-001",
+            "name": "Agent Bot"
+          }
+        },
+        {
+          "id": "comment-002",
+          "body": "That would explain why restarting fixes it temporarily — fresh process means fresh objects. Under load the GC doesn't clean up fast enough and the stale references stick around for the next event.",
+          "createdAt": "2026-02-12T15:10:00.000Z",
+          "user": {
+            "id": "user-001",
+            "name": "Agent Bot"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "issue-002",
+    "identifier": "PLT-32",
+    "title": "Add regression tests for per-user notification channel isolation",
+    "description": "Once PLT-31 is fixed, we need tests that verify each user's notification channels are independent.\n\n**Acceptance criteria:**\n- Test that processing a webhook for User A (Slack-only) followed by User B (email-only) sends correct channels for both\n- Test that a user with no channel preferences gets the default (email) and not channels from a previous event\n- Tests should run in CI without external dependencies",
+    "priority": 2,
+    "state": {
+      "id": "state-002",
+      "name": "Todo",
+      "type": "unstarted"
+    },
+    "team": {
+      "id": "team-001",
+      "name": "Platform",
+      "key": "PLT"
+    },
+    "assignee": null,
+    "creator": {
+      "id": "user-001",
+      "name": "Agent Bot"
+    },
+    "project": {
+      "id": "project-001",
+      "name": "Webhook Reliability"
+    },
+    "labels": {
+      "nodes": []
+    },
+    "createdAt": "2026-02-12T15:45:00.000Z",
+    "updatedAt": "2026-02-12T15:45:00.000Z",
+    "url": "https://linear.app/acme-corp/issue/PLT-32",
+    "comments": {
+      "nodes": []
+    }
+  }
+]

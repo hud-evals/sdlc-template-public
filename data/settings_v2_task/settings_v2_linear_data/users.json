@@ -1,0 +1,12 @@
+[
+  {
+    "id": "user-agent-bot",
+    "name": "Agent Bot",
+    "displayName": "Agent Bot",
+    "email": "agent-bot@acme-corp.dev",
+    "admin": false,
+    "active": true,
+    "createdAt": "2025-01-15T10:00:00.000Z",
+    "updatedAt": "2026-02-10T08:00:00.000Z"
+  }
+]

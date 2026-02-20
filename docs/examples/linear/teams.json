@@ -1,0 +1,24 @@
+[
+  {
+    "id": "team-eng",
+    "name": "Engineering",
+    "key": "ENG",
+    "description": "Core engineering team",
+    "icon": "🔧",
+    "color": "#5e6ad2",
+    "cyclesEnabled": true,
+    "triageEnabled": true,
+    "private": false
+  },
+  {
+    "id": "team-inf",
+    "name": "Infrastructure",
+    "key": "INF",
+    "description": "Platform and infrastructure team",
+    "icon": "🏗️",
+    "color": "#4ea7fc",
+    "cyclesEnabled": true,
+    "triageEnabled": false,
+    "private": false
+  }
+]

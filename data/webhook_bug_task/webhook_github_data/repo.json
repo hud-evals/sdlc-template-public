@@ -1,0 +1,11 @@
+{
+  "id": 5,
+  "name": "webhook-service",
+  "full_name": "acme-corp/webhook-service",
+  "description": "Webhook notification processing service",
+  "default_branch": "webhook_bug_baseline",
+  "private": true,
+  "html_url": "https://github.com/acme-corp/webhook-service",
+  "language": "Python",
+  "topics": ["webhooks", "notifications", "python"]
+}

@@ -1,0 +1,13 @@
+diff --git a/server.py b/server.py
+index 7a7c59f..2580399 100644
+--- a/server.py
++++ b/server.py
+@@ -18,7 +18,7 @@ class APIHandler(BaseHTTPRequestHandler):
+ 
+     def _send_json(self, data, status_code=200):
+         """Send a JSON response."""
+-        body = str(data)
++        body = json.dumps(data)
+         self._send_response(status_code, "application/json", body)
+ 
+     def do_GET(self):

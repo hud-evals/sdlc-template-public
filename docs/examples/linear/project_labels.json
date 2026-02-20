@@ -1,0 +1,4 @@
+[
+  { "id": "plbl-001", "name": "Backend", "color": "#5e6ad2", "description": "Backend services" },
+  { "id": "plbl-002", "name": "Critical", "color": "#eb5757", "description": "Critical priority projects" }
+]

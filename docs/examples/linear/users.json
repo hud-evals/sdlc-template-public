@@ -1,0 +1,29 @@
+[
+  {
+    "id": "user-001",
+    "name": "Alex Rivera",
+    "email": "alex@company.com",
+    "displayName": "Alex",
+    "active": true,
+    "admin": true,
+    "url": "https://linear.app/user/alex"
+  },
+  {
+    "id": "user-002",
+    "name": "Sam Patel",
+    "email": "sam@company.com",
+    "displayName": "Sam",
+    "active": true,
+    "admin": false,
+    "url": "https://linear.app/user/sam"
+  },
+  {
+    "id": "user-003",
+    "name": "Jordan Kim",
+    "email": "jordan@company.com",
+    "displayName": "Jordan",
+    "active": true,
+    "admin": false,
+    "url": "https://linear.app/user/jordan"
+  }
+]

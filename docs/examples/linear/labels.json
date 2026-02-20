@@ -1,0 +1,7 @@
+[
+  { "id": "lbl-bug", "name": "Bug", "color": "#eb5757", "description": "Something isn't working", "teamId": "team-eng" },
+  { "id": "lbl-feature", "name": "Feature", "color": "#5e6ad2", "description": "New feature or enhancement", "teamId": "team-eng" },
+  { "id": "lbl-improvement", "name": "Improvement", "color": "#4ea7fc", "description": "Improvement to existing functionality", "teamId": "team-eng" },
+  { "id": "lbl-infra", "name": "Infrastructure", "color": "#95a2b3", "description": "Infrastructure and DevOps", "teamId": "team-inf" },
+  { "id": "lbl-p1", "name": "P1", "color": "#eb5757", "description": "Critical priority", "teamId": "team-eng" }
+]

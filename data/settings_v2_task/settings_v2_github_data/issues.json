@@ -1,0 +1,66 @@
+[
+  {
+    "number": 22,
+    "id": 2201,
+    "title": "Refactor settings pipeline: clean dict merge pattern",
+    "state": "closed",
+    "locked": false,
+    "user": {"login": "alex-dev", "id": 70001, "type": "User"},
+    "labels": [
+      {"id": 3001, "name": "refactor", "color": "0075ca"},
+      {"id": 3002, "name": "merged", "color": "6f42c1"}
+    ],
+    "body": "## Settings Pipeline Refactor\n\nThe current settings loading code is a mess of nested if/else branches that's hard to follow and maintain. I'm replacing it with a clean dict merge pattern.\n\n### New approach\nUse Python's dict unpacking with a filtered custom dict to overlay user preferences on top of defaults. We clean up null/unset entries from the user's stored settings first so that defaults apply properly for any setting the user hasn't explicitly configured.\n\nThis is a pure refactor — behavior should be identical. The settings write path is untouched.\n\n### Testing\n- Ran the existing settings test suite, all green\n- Manually verified with a few test accounts\n- Premium and free tier accounts both load correctly",
+    "created_at": "2026-01-20T11:30:00Z",
+    "updated_at": "2026-01-24T16:45:00Z",
+    "closed_at": "2026-01-24T16:45:00Z",
+    "html_url": "https://github.com/acme-corp/settings-api/issues/22",
+    "comments": 1,
+    "comments_data": [
+      {
+        "id": 5002,
+        "user": {"login": "sarah-dev", "id": 70002, "type": "User"},
+        "body": "Nice cleanup! The dict unpacking approach is much more idiomatic. Approved.",
+        "created_at": "2026-01-23T14:20:00Z",
+        "updated_at": "2026-01-23T14:20:00Z"
+      }
+    ]
+  },
+  {
+    "number": 31,
+    "id": 3101,
+    "title": "Settings keep reverting — notification spam and dark mode won't stay off",
+    "state": "open",
+    "locked": false,
+    "user": {"login": "alice-user", "id": 70003, "type": "User"},
+    "labels": [
+      {"id": 3003, "name": "bug", "color": "d73a4a"},
+      {"id": 3005, "name": "P1", "color": "e11d48"}
+    ],
+    "body": "I set my notification frequency to Never weeks ago but I'm still getting daily emails. When I go back to settings, it shows Daily instead of Never.\n\nI also turned off dark mode but it keeps re-enabling itself on page reload.\n\nI've changed these settings back multiple times and they keep reverting. This is really frustrating — please fix.",
+    "created_at": "2026-02-11T08:15:00Z",
+    "updated_at": "2026-02-13T10:00:00Z",
+    "closed_at": null,
+    "html_url": "https://github.com/acme-corp/settings-api/issues/31",
+    "comments": 0,
+    "comments_data": []
+  },
+  {
+    "number": 33,
+    "id": 3301,
+    "title": "My bio keeps coming back after I clear it",
+    "state": "open",
+    "locked": false,
+    "user": {"login": "charlie-user", "id": 70004, "type": "User"},
+    "labels": [
+      {"id": 3003, "name": "bug", "color": "d73a4a"}
+    ],
+    "body": "I cleared my bio (deleted all the text) but every time I reload my profile, the default bio text is back. I've tried clearing it several times. Other settings like my theme (midnight) work fine and persist correctly.",
+    "created_at": "2026-02-12T09:00:00Z",
+    "updated_at": "2026-02-12T09:00:00Z",
+    "closed_at": null,
+    "html_url": "https://github.com/acme-corp/settings-api/issues/33",
+    "comments": 0,
+    "comments_data": []
+  }
+]

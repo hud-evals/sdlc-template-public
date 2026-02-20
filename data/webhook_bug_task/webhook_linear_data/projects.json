@@ -1,0 +1,23 @@
+[
+  {
+    "id": "project-001",
+    "name": "Webhook Reliability",
+    "description": "Improve reliability and correctness of the webhook notification pipeline. Covers channel routing bugs, delivery guarantees, and regression test coverage.",
+    "state": "started",
+    "progress": 0.2,
+    "startDate": "2026-02-10",
+    "targetDate": "2026-03-15",
+    "lead": {
+      "id": "user-001",
+      "name": "Agent Bot"
+    },
+    "teams": {
+      "nodes": [
+        {"id": "team-001", "name": "Platform", "key": "PLT"}
+      ]
+    },
+    "url": "https://linear.app/acme-corp/project/webhook-reliability",
+    "createdAt": "2026-02-10T09:00:00.000Z",
+    "updatedAt": "2026-02-12T15:45:00.000Z"
+  }
+]

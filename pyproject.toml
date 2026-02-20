@@ -1,0 +1,32 @@
+[project]
+name = "sdlc-template"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "hud-python>=0.5.26",
+    "hud-sdlc-lib @ git+https://github.com/hud-evals/hud-sdlc-lib.git@main",
+    "pytest",
+]
+
+[project.scripts]
+dev = "sdlc_scripts:dev"
+build = "sdlc_scripts:build"
+deploy = "sdlc_scripts:deploy"
+setup = "sdlc_scripts:setup"
+update-sdlc = "sdlc_scripts:update"
+validate = "sdlc_scripts:validate"
+new-task = "sdlc_scripts:new_task"
+generate-golden = "sdlc_scripts:generate_golden"
+sync-tasks = "sdlc_scripts:sync_tasks"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["sdlc_scripts"]
+
+[tool.uv]
+package = true

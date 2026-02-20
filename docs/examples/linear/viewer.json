@@ -1,0 +1,8 @@
+{
+  "id": "user-001",
+  "name": "Alex Rivera",
+  "email": "alex@company.com",
+  "displayName": "Alex",
+  "active": true,
+  "admin": true
+}

@@ -1,0 +1,29 @@
+[
+  {
+    "id": "301",
+    "shortId": "USER-SVC-1",
+    "title": "TypeError: 'NoneType' object is not subscriptable",
+    "culprit": "user_service.get_user_profile",
+    "level": "error",
+    "status": "unresolved",
+    "count": "142",
+    "userCount": 23,
+    "firstSeen": "2026-02-14T08:12:00Z",
+    "lastSeen": "2026-02-18T11:45:00Z",
+    "priority": "high",
+    "isUnhandled": true,
+    "permalink": "http://localhost:8000/organizations/sentry/issues/301/",
+    "metadata": {
+      "type": "TypeError",
+      "value": "'NoneType' object is not subscriptable",
+      "filename": "user_service.py",
+      "function": "get_user_profile"
+    },
+    "project": {
+      "name": "user-service",
+      "slug": "user-service",
+      "platform": "python"
+    },
+    "assignedTo": null
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "label-bug",
+    "name": "Bug",
+    "color": "#eb5757",
+    "description": "Something isn't working correctly",
+    "teamId": "team-001",
+    "createdAt": "2025-02-01T10:00:00.000Z"
+  },
+  {
+    "id": "label-p1",
+    "name": "P1",
+    "color": "#e11d48",
+    "description": "Priority 1 — critical, affects paying users",
+    "teamId": "team-001",
+    "createdAt": "2025-02-01T10:00:00.000Z"
+  },
+  {
+    "id": "label-settings",
+    "name": "Settings",
+    "color": "#4ea7fc",
+    "description": "Related to user settings and preferences",
+    "teamId": "team-001",
+    "createdAt": "2025-03-10T10:00:00.000Z"
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "id": "cyc-001",
+    "number": 5,
+    "name": "Sprint 5",
+    "startsAt": "2026-01-27T00:00:00.000Z",
+    "endsAt": "2026-02-10T00:00:00.000Z",
+    "isActive": false,
+    "progress": 0.85,
+    "teamId": "team-eng"
+  },
+  {
+    "id": "cyc-002",
+    "number": 6,
+    "name": "Sprint 6",
+    "startsAt": "2026-02-10T00:00:00.000Z",
+    "endsAt": "2026-02-24T00:00:00.000Z",
+    "isActive": true,
+    "progress": 0.2,
+    "teamId": "team-eng"
+  }
+]

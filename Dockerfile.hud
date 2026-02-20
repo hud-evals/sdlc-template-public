@@ -1,0 +1,97 @@
+# syntax=docker/dockerfile:1
+
+# ---- Stage: base system packages (rarely changes) ----
+FROM ubuntu:24.04 AS setup
+
+# Update and install core dependencies
+RUN apt-get update -y \
+  && apt-get install -y --no-install-recommends \
+  bash \
+  build-essential \
+  ca-certificates \
+  curl \
+  git \
+  gnupg \
+  openssl \
+  python-is-python3 \
+  python3 \
+  python3-dev \
+  python3-pip \
+  python3-venv \
+  python3-wheel \
+  sqlite3 \
+  sudo \
+  vim \
+  wget \
+  lsb-release \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN update-ca-certificates
+
+WORKDIR /
+
+# Install nvm for ubuntu user
+USER ubuntu
+ENV HOME=/home/ubuntu
+
+# configure git
+RUN git config --global user.email "agent@example.com"
+RUN git config --global user.name "mr agent"
+
+
+# ========================= PROJECT SETUP =========================
+
+ARG MCP_TESTING_MODE="1"
+ENV MCP_TESTING_MODE=${MCP_TESTING_MODE}
+
+ARG FOLDER_NAME="workspace"
+ENV FOLDER_NAME=${FOLDER_NAME}
+
+USER root
+
+# ---- Stage: clone task repos (cached independently of Python deps) ----
+FROM ubuntu:24.04 AS repos
+RUN apt-get update -y \
+  && apt-get install -y --no-install-recommends git ca-certificates python3 \
+  && rm -rf /var/lib/apt/lists/*
+COPY ./repo_config.yaml /tmp/repo_config.yaml
+COPY ./clone_repos.py /tmp/clone_repos.py
+RUN --mount=type=secret,id=SOURCE_GITHUB_PAT \
+    SOURCE_GITHUB_PAT="$(cat /run/secrets/SOURCE_GITHUB_PAT 2>/dev/null || echo '')" \
+    python3 /tmp/clone_repos.py /tmp/repo_config.yaml /home/root/source
+
+# ---- Stage: runtime (builds on setup, pulls in repos) ----
+FROM setup AS runtime
+
+# Install uv for dependency management
+RUN pip install uv --break-system-packages
+
+# Copy the environment structure
+COPY ./pyproject.toml /mcp_server/pyproject.toml
+COPY ./uv.lock /mcp_server/uv.lock
+WORKDIR /mcp_server
+
+ENV RUST_LOG=warn
+RUN --mount=type=secret,id=LIB_GITHUB_PAT \
+    LIB_GITHUB_PAT="$(cat /run/secrets/LIB_GITHUB_PAT 2>/dev/null || echo '')" && \
+    git config --global url."https://${LIB_GITHUB_PAT}@github.com/".insteadOf "https://github.com/" && \
+    uv venv && . .venv/bin/activate && uv sync --no-install-project && uv pip install -e . && \
+    (git config --global --remove-section "url.https://${LIB_GITHUB_PAT}@github.com/" || true)
+
+# Bring in pre-cloned repos from the repos stage
+COPY --from=repos /home/root/source /home/root/source
+
+ENV PYTHONPATH=/mcp_server/.venv/lib/python3.12/site-packages:/mcp_server
+ENV PATH=/mcp_server/.venv/bin:/home/ubuntu/.local/bin:$PATH
+
+COPY ./env.py /mcp_server/env.py
+COPY data/ /mcp_server/data/
+
+# Lock down scenario internals so the agent (ubuntu) cannot read grading logic,
+# hidden branch names, or golden_ref values. The MCP server runs as root.
+RUN chmod 700 /mcp_server/env.py
+
+# _HUD_DEV_CHILD=1 skips the file-watcher/hot-reload loop in hud dev,
+# which otherwise restarts the server when grading modifies files.
+ENV _HUD_DEV_CHILD=1
+CMD ["hud", "dev", "env:env", "--stdio"]

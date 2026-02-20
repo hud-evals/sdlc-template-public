@@ -1,0 +1,11 @@
+[
+  { "id": "ws-backlog-eng", "name": "Backlog", "type": "backlog", "color": "#bec2c8", "teamId": "team-eng" },
+  { "id": "ws-todo-eng", "name": "Todo", "type": "unstarted", "color": "#e2e2e2", "teamId": "team-eng" },
+  { "id": "ws-inprogress-eng", "name": "In Progress", "type": "started", "color": "#f2c94c", "teamId": "team-eng" },
+  { "id": "ws-inreview-eng", "name": "In Review", "type": "started", "color": "#f2994a", "teamId": "team-eng" },
+  { "id": "ws-done-eng", "name": "Done", "type": "completed", "color": "#5e6ad2", "teamId": "team-eng" },
+  { "id": "ws-canceled-eng", "name": "Canceled", "type": "canceled", "color": "#95a2b3", "teamId": "team-eng" },
+  { "id": "ws-backlog-inf", "name": "Backlog", "type": "backlog", "color": "#bec2c8", "teamId": "team-inf" },
+  { "id": "ws-inprogress-inf", "name": "In Progress", "type": "started", "color": "#4ea7fc", "teamId": "team-inf" },
+  { "id": "ws-done-inf", "name": "Done", "type": "completed", "color": "#5e6ad2", "teamId": "team-inf" }
+]

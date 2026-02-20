@@ -1,0 +1,67 @@
+[
+  {
+    "number": 1,
+    "title": "Tasks API broken — 500 errors across all task endpoints",
+    "body": "Since the latest deploy, basically every endpoint under /api/v1/tasks/ is returning 500 errors. Listing tasks, getting a single task, creating tasks — all broken.\n\nI checked the users and organizations endpoints and those seem fine, so it's specific to tasks.\n\nThis is blocking the frontend team, please prioritize.",
+    "state": "open",
+    "labels": [{"name": "bug"}, {"name": "P0"}],
+    "assignees": [],
+    "user": {"login": "sarah-pm", "id": 2},
+    "created_at": "2026-02-10T09:15:00Z",
+    "updated_at": "2026-02-10T09:15:00Z",
+    "comments": 0,
+    "html_url": "https://github.com/my-org/my-app/issues/1"
+  },
+  {
+    "number": 2,
+    "title": "Cannot create new tasks — something about invalid timestamp",
+    "body": "When trying to create a new task via POST /api/v1/tasks/, the API returns a 500. I looked at the logs briefly and saw something about a timestamp format issue but couldn't figure out where it's coming from.\n\nThis might be related to issue #1 but I'm not sure — the error message looks different.",
+    "state": "open",
+    "labels": [{"name": "bug"}],
+    "assignees": [],
+    "user": {"login": "mike-backend", "id": 3},
+    "created_at": "2026-02-10T10:30:00Z",
+    "updated_at": "2026-02-10T10:30:00Z",
+    "comments": 0,
+    "html_url": "https://github.com/my-org/my-app/issues/2"
+  },
+  {
+    "number": 3,
+    "title": "Comments feature completely down",
+    "body": "The comments endpoint (/api/v1/comments/) is returning 500s. Users can't view or add comments on any task. The error seems database-related but I haven't dug into it yet.",
+    "state": "open",
+    "labels": [{"name": "bug"}, {"name": "P1"}],
+    "assignees": [],
+    "user": {"login": "qa-engineer", "id": 4},
+    "created_at": "2026-02-10T11:00:00Z",
+    "updated_at": "2026-02-10T11:00:00Z",
+    "comments": 0,
+    "html_url": "https://github.com/my-org/my-app/issues/3"
+  },
+  {
+    "number": 4,
+    "title": "Permission checks failing on write operations",
+    "body": "Users with proper write permissions are getting rejected when trying to update or delete tasks. The error is coming from somewhere in the auth middleware.\n\nI think this started after the last refactor but not 100% sure.",
+    "state": "open",
+    "labels": [{"name": "bug"}, {"name": "P1"}],
+    "assignees": [],
+    "user": {"login": "sarah-pm", "id": 2},
+    "created_at": "2026-02-10T14:20:00Z",
+    "updated_at": "2026-02-10T14:20:00Z",
+    "comments": 0,
+    "html_url": "https://github.com/my-org/my-app/issues/4"
+  },
+  {
+    "number": 5,
+    "title": "Deploy investigation: database migrations not applied to Postgres",
+    "body": "Following up on the 500 errors in #1 and #3 — I connected directly to Postgres and the schema looks incomplete. The later migrations (priority column, due_date, comments table) are all present as files in alembic/versions/ but they were never actually applied to the Postgres database.\n\nI ran `alembic current` inside the container and it returns nothing — as if alembic has never touched this database. But the migration files themselves are definitely correct, I read through all of them.\n\nMy hunch is alembic is falling back to the SQLite URL in alembic.ini instead of connecting to Postgres. I think the env var refactoring from last sprint may have broken something in how the migration config picks up the database connection string.\n\nLow priority compared to the other P0/P1s, but this should be fixed too so deploys work correctly.",
+    "state": "open",
+    "labels": [{"name": "bug"}, {"name": "investigation"}],
+    "assignees": [],
+    "user": {"login": "mike-backend", "id": 3},
+    "created_at": "2026-02-10T16:45:00Z",
+    "updated_at": "2026-02-10T16:45:00Z",
+    "comments": 0,
+    "html_url": "https://github.com/my-org/my-app/issues/5"
+  }
+]

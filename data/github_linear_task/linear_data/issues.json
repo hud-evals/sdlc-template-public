@@ -1,0 +1,19 @@
+[
+  {
+    "id": "issue-001",
+    "identifier": "ENG-1",
+    "title": "API returns malformed JSON — Python dict repr instead of proper JSON",
+    "description": "## Bug Report\n\nOur API server returns responses that are **not valid JSON**. Instead of proper JSON (double quotes, lowercase booleans), the responses look like Python's `str(dict)` output.\n\n### Steps to Reproduce\n1. Start the server (`python server.py`)\n2. Make any request: `curl http://localhost:8000/`\n3. Observe the response uses single quotes instead of double quotes\n\n### Expected\n```json\n{\"status\": \"ok\", \"data\": {\"message\": \"hello\"}}\n```\n\n### Actual\n```\n{'status': 'ok', 'data': {'message': 'hello'}}\n```\n\n### Root Cause\nLikely using `str()` on a dict instead of `json.dumps()`.\n\n### Acceptance Criteria\n- All API endpoints return valid JSON\n- Content-Type header is `application/json`\n- Fix the bug, create a PR on GitHub",
+    "priority": 1,
+    "url": "https://linear.app/eng/issue/ENG-1",
+    "createdAt": "2026-02-10T09:00:00.000Z",
+    "updatedAt": "2026-02-10T09:00:00.000Z",
+    "completedAt": null,
+    "state": {"id": "state-003", "name": "In Progress", "type": "started", "color": "#f2c94c"},
+    "assignee": {"id": "user-001", "name": "Agent Bot", "email": "agent@example.com"},
+    "team": {"id": "team-001", "name": "Engineering", "key": "ENG"},
+    "project": null,
+    "labels": {"nodes": [{"id": "label-001", "name": "Bug", "color": "#eb5757"}]},
+    "comments": {"nodes": []}
+  }
+]

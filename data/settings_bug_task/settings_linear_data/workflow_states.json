@@ -1,0 +1,42 @@
+[
+  {
+    "id": "state-backlog",
+    "name": "Backlog",
+    "type": "backlog",
+    "color": "#bec2c8",
+    "position": 0,
+    "teamId": "team-001"
+  },
+  {
+    "id": "state-todo",
+    "name": "Todo",
+    "type": "unstarted",
+    "color": "#e2e2e2",
+    "position": 1,
+    "teamId": "team-001"
+  },
+  {
+    "id": "state-in-progress",
+    "name": "In Progress",
+    "type": "started",
+    "color": "#f2c94c",
+    "position": 2,
+    "teamId": "team-001"
+  },
+  {
+    "id": "state-in-review",
+    "name": "In Review",
+    "type": "started",
+    "color": "#f2994a",
+    "position": 3,
+    "teamId": "team-001"
+  },
+  {
+    "id": "state-done",
+    "name": "Done",
+    "type": "completed",
+    "color": "#5e6ad2",
+    "position": 4,
+    "teamId": "team-001"
+  }
+]

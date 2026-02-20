@@ -1,0 +1,11 @@
+{
+  "id": 10,
+  "name": "hud-sdk",
+  "full_name": "acme-corp/hud-sdk",
+  "description": "Python SDK for the HUD evaluation platform",
+  "default_branch": "eval_reward_baseline",
+  "private": true,
+  "html_url": "https://github.com/acme-corp/hud-sdk",
+  "language": "Python",
+  "topics": ["sdk", "python", "evaluation", "mcp"]
+}

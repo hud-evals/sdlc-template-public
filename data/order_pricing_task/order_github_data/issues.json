@@ -1,0 +1,122 @@
+[
+  {
+    "number": 12,
+    "title": "Refactor tax calculation to support regional pricing",
+    "state": "closed",
+    "labels": [
+      {"name": "refactor", "color": "0075ca"},
+      {"name": "merged", "color": "6f42c1"}
+    ],
+    "user": {
+      "login": "alex-dev",
+      "id": 101
+    },
+    "assignees": [
+      {"login": "alex-dev", "id": 101}
+    ],
+    "body": "## Summary\n\nWe need to refactor the tax calculation logic to support both tax-inclusive and tax-exclusive regions as part of our EU expansion.\n\n### Requirements\n\n1. Add a `TAX_INCLUSIVE` configuration flag to control pricing behavior\n2. Refactor `calculate_order_total` to use the new flag\n3. When `TAX_INCLUSIVE=True`, the displayed price already includes tax (EU model)\n4. When `TAX_INCLUSIVE=False` (our current default), tax is added after subtotal calculation\n5. Update the pricing pipeline to respect the flag at each stage\n\n### Technical Approach\n\n- Move tax calculation to occur before discount application in the pipeline\n- This allows tax-inclusive pricing to work correctly where the tax is part of the displayed price\n- The `TAX_INCLUSIVE` flag determines whether tax is embedded in the price or added on top\n- For our default (tax-exclusive), tax is still added after, but the pipeline order supports both modes\n\n### Testing\n\n- Add unit tests for both tax-inclusive and tax-exclusive scenarios\n- Verify existing order totals are unchanged for tax-exclusive mode\n- Test EU tax-inclusive pricing with sample VAT rates",
+    "created_at": "2025-11-03T09:15:00Z",
+    "updated_at": "2025-11-10T16:42:00Z",
+    "closed_at": "2025-11-10T16:42:00Z",
+    "comments": 4,
+    "comments_data": [
+      {
+        "id": 201,
+        "user": {"login": "alex-dev", "id": 101},
+        "body": "Moved tax calculation to happen before discount application so we can support tax-inclusive pricing where tax is part of the displayed price. The `TAX_INCLUSIVE` flag controls this — when `False` (our default), tax is added after. When `True`, the price already includes tax.\n\nThe key change is in `calculate_order_total()` — the tax step now runs before the discount step in the pricing pipeline. For tax-exclusive mode (our default), the math should be equivalent since we're just reordering independent operations.\n\nPR is up for review.",
+        "created_at": "2025-11-08T14:23:00Z",
+        "updated_at": "2025-11-08T14:23:00Z"
+      },
+      {
+        "id": 202,
+        "user": {"login": "sarah-dev", "id": 102},
+        "body": "LGTM. The tax-before-discount approach matches our accounting requirements for the EU expansion. The tax-inclusive model needs tax computed on the base price before any discounts are applied, so this pipeline order makes sense.\n\nVerified that existing tests still pass for tax-exclusive mode.",
+        "created_at": "2025-11-09T10:05:00Z",
+        "updated_at": "2025-11-09T10:05:00Z"
+      },
+      {
+        "id": 203,
+        "user": {"login": "alex-dev", "id": 101},
+        "body": "Thanks for the review. Merging now. The tax-exclusive path (our production default) should behave identically since tax and discount are independent calculations on the subtotal.",
+        "created_at": "2025-11-10T16:30:00Z",
+        "updated_at": "2025-11-10T16:30:00Z"
+      },
+      {
+        "id": 204,
+        "user": {"login": "sarah-dev", "id": 102},
+        "body": "Confirmed deployed to staging. EU tax-inclusive tests are passing. Closing this out.",
+        "created_at": "2025-11-10T16:42:00Z",
+        "updated_at": "2025-11-10T16:42:00Z"
+      }
+    ]
+  },
+  {
+    "number": 15,
+    "title": "Discount amounts sometimes off by a penny",
+    "state": "open",
+    "labels": [
+      {"name": "bug", "color": "d73a4a"}
+    ],
+    "user": {
+      "login": "sarah-dev",
+      "id": 102
+    },
+    "assignees": [],
+    "body": "## Bug\n\nCustomers report that discount amounts don't always match the expected percentage. For example, a 10% discount on a $49.99 item shows as $4.99 instead of $5.00. This seems inconsistent — sometimes it's correct, sometimes it's a penny off.\n\n### Steps to Reproduce\n\n1. Add an item priced at $49.99 to the cart\n2. Apply a 10% discount code\n3. Expected discount: $5.00 (10% of $49.99 = $4.999, rounded to $5.00)\n4. Actual discount shown: $4.99\n\n### Additional Examples\n\n- 15% off $33.33 = expected $5.00, actual $4.99\n- 20% off $14.99 = expected $3.00, actual $2.99\n- 10% off $50.00 = expected $5.00, actual $5.00 (correct — no fractional cents)\n\nThe pattern seems to be that when the raw calculation produces a value with fractional cents (e.g., $4.999), the result is always rounded down instead of using standard rounding.",
+    "created_at": "2025-12-01T11:30:00Z",
+    "updated_at": "2026-01-15T09:20:00Z",
+    "closed_at": null,
+    "comments": 2,
+    "comments_data": [
+      {
+        "id": 301,
+        "user": {"login": "alex-dev", "id": 101},
+        "body": "I think this might be a floating point precision issue. Our `round_cents` utility uses truncation (`int(amount * 100) / 100`) to avoid floating point drift — maybe we need to revisit that approach.\n\nThe truncation was originally chosen because standard `round()` can produce unexpected results with floating point numbers (e.g., `round(2.675, 2)` gives `2.67` instead of `2.68` in Python). But truncation consistently rounds down, which might not be what customers expect.\n\nI'm not sure if changing it would break the accounting reconciliation though — the accounting system may depend on the current truncation behavior for consistency.",
+        "created_at": "2025-12-05T14:15:00Z",
+        "updated_at": "2025-12-05T14:15:00Z"
+      },
+      {
+        "id": 302,
+        "user": {"login": "sarah-dev", "id": 102},
+        "body": "Talked to the accounting team — they confirmed they're fine with standard rounding. They said truncation was never a requirement, it was just an implementation choice.\n\nBut let's be careful — the tax calculations depend on `round_cents` too, so changing its behavior will affect tax amounts as well. We should make sure the overall order total is still correct after any changes.\n\nRelated: Issue #18 might be caused by this same rounding problem compounding with the tax calculation.",
+        "created_at": "2026-01-15T09:20:00Z",
+        "updated_at": "2026-01-15T09:20:00Z"
+      }
+    ]
+  },
+  {
+    "number": 18,
+    "title": "Discounted order totals don't match expected amounts",
+    "state": "open",
+    "labels": [
+      {"name": "bug", "color": "d73a4a"},
+      {"name": "P1", "color": "e4e669"}
+    ],
+    "user": {
+      "login": "sarah-dev",
+      "id": 102
+    },
+    "assignees": [],
+    "body": "## Bug Report\n\nDiscounted order totals are consistently higher than expected. The discrepancy varies by order but is always in the direction of overcharging the customer.\n\n### Reproduction Case\n\n**Order details:**\n- 2x Widget ($25.00 each) = $50.00 subtotal\n- Discount code: SAVE10 (10% off)\n- Tax rate: 8%\n\n**Expected calculation:**\n```\nSubtotal:  $50.00\nDiscount:  -$5.00  (10% of $50.00)\nAfter discount: $45.00\nTax:       +$3.60  (8% of $45.00)\nTotal:     $48.60\n```\n\n**Actual result:**\n```\nTotal: $49.14\n```\n\nThe difference ($0.54) suggests the tax and discount are being applied in the wrong order, or there's a compounding rounding issue somewhere in the pipeline.\n\n### Additional Test Cases\n\n| Items | Subtotal | Discount | Tax | Expected | Actual | Diff |\n|-------|----------|----------|-----|----------|--------|------|\n| 2x Widget | $50.00 | 10% | 8% | $48.60 | $49.14 | +$0.54 |\n| 1x Gadget | $149.99 | 20% | 8% | $129.59 | $130.31 | +$0.72 |\n| 3x Gizmo | $29.97 | 15% | 6% | $27.00 | $27.37 | +$0.37 |\n\n### Investigation Notes\n\n- The overcharge amount varies but is always positive (customer is always overcharged)\n- Larger discounts seem to produce larger discrepancies\n- Orders without discount codes calculate correctly\n- The issue started appearing after the tax refactor in Issue #12\n\n### Related Issues\n- #12 — Tax calculation refactor (merged, possibly related)\n- #15 — Penny rounding issue (possibly compounding with this)",
+    "created_at": "2026-01-20T08:45:00Z",
+    "updated_at": "2026-02-10T15:30:00Z",
+    "closed_at": null,
+    "comments": 2,
+    "comments_data": [
+      {
+        "id": 401,
+        "user": {"login": "alex-dev", "id": 101},
+        "body": "I looked at the pricing code and the tax calculation was intentionally moved before discount in Issue #12 for the EU tax compliance work. I don't think that's the issue — the tax-before-discount order is by design for tax-inclusive regions, and for our default tax-exclusive mode the math should be equivalent.\n\nMaybe check the discount percentage calculation itself? Or could it be the `round_cents` truncation from Issue #15 compounding at multiple stages?",
+        "created_at": "2026-01-25T11:00:00Z",
+        "updated_at": "2026-01-25T11:00:00Z"
+      },
+      {
+        "id": 402,
+        "user": {"login": "sarah-dev", "id": 102},
+        "body": "I traced through the code and the discount calculation looks correct — `apply_discount` returns the right percentage of the subtotal. The percentage math itself is fine.\n\nCould the rounding be compounding somehow? If `round_cents` truncates at each step (tax calculation, then discount application), the small errors might add up. But I'm not sure that fully explains the $0.54 discrepancy on a $50 order.\n\nI'm going to keep digging but would appreciate another pair of eyes on this.",
+        "created_at": "2026-02-10T15:30:00Z",
+        "updated_at": "2026-02-10T15:30:00Z"
+      }
+    ]
+  }
+]

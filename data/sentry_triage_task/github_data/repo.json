@@ -1,0 +1,11 @@
+{
+  "id": 3,
+  "name": "user-service",
+  "full_name": "acme-corp/user-service",
+  "description": "User profile microservice",
+  "default_branch": "sentry_fix_baseline",
+  "private": true,
+  "html_url": "https://github.com/acme-corp/user-service",
+  "language": "Python",
+  "topics": ["api", "python", "users"]
+}

@@ -1,0 +1,30 @@
+[
+  {
+    "number": 42,
+    "id": 4201,
+    "title": "Got a Slack notification I shouldn't have received",
+    "state": "open",
+    "user": {"login": "bob-user", "id": 70003, "type": "User"},
+    "labels": [{"id": 3003, "name": "bug", "color": "d73a4a"}],
+    "body": "I only have email notifications enabled but I got a Slack ping for a task assignment. I've never enabled Slack. Please check my account.",
+    "created_at": "2026-02-10T14:00:00Z",
+    "updated_at": "2026-02-10T14:00:00Z",
+    "html_url": "https://github.com/acme-corp/webhook-service/issues/42",
+    "comments": 0,
+    "comments_data": []
+  },
+  {
+    "number": 45,
+    "id": 4501,
+    "title": "Wrong notification channels for some users",
+    "state": "open",
+    "user": {"login": "sarah-dev", "id": 70002, "type": "User"},
+    "labels": [{"id": 3003, "name": "bug", "color": "d73a4a"}, {"id": 3005, "name": "P1", "color": "e11d48"}],
+    "body": "We're getting reports from multiple users that they receive notifications on channels they haven't opted into. It seems intermittent — not every notification is wrong. Restarting the service seems to fix it temporarily.",
+    "created_at": "2026-02-11T10:00:00Z",
+    "updated_at": "2026-02-12T09:00:00Z",
+    "html_url": "https://github.com/acme-corp/webhook-service/issues/45",
+    "comments": 0,
+    "comments_data": []
+  }
+]

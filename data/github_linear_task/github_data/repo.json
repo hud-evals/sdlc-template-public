@@ -1,0 +1,11 @@
+{
+  "id": 1,
+  "name": "server-app",
+  "full_name": "acme-corp/server-app",
+  "description": "A simple API server",
+  "default_branch": "server_fix_baseline",
+  "private": true,
+  "html_url": "https://github.com/acme-corp/server-app",
+  "language": "Python",
+  "topics": ["api", "python"]
+}
