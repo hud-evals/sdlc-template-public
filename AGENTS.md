@@ -88,6 +88,19 @@ The lifecycle:
 5. **Second `yield`**: returns the reward score (0.0–1.0)
 
 
+### System Prompt
+
+Each task can set a **system prompt**, distinct from the task prompt yielded by the scenario. Set it via `task.agent_config`:
+
+```python
+task = bug_fix.task(prompt="Fix the login bug...", ...)
+task.slug = "login_fix"
+task.agent_config = {
+    "system_prompt": "You are a senior software engineer. Follow the instructions given to you to the best of your ability.",
+}
+```
+
+
 ### Repos and Branches
 
 The evaluation system uses a two-phase approach to repository management:

@@ -161,10 +161,60 @@ def _collect_tasks() -> tuple[dict[str, Any], dict[str, str]]:
 
 
 def new_task():
-    """Scaffold a new task directory."""
-    from sdlc.cli.new_task import new_task as _new_task
+    """Scaffold a new task directory under tasks/."""
+    import argparse
+    import re
 
-    _new_task(Path(__file__).parent / "tasks")
+    parser = argparse.ArgumentParser(description="Scaffold a new task")
+    parser.add_argument("name", help="Task name in snake_case (e.g. 'fix_auth_bug')")
+    args = parser.parse_args()
+
+    name: str = args.name
+    if not re.match(r"^[a-z][a-z0-9_]*$", name):
+        print(f"Invalid task name '{name}'. Use snake_case (e.g. 'fix_auth_bug').")
+        raise SystemExit(1)
+
+    tasks_dir = Path(__file__).parent / "tasks"
+    task_dir = tasks_dir / name
+    if task_dir.exists():
+        print(f"Task '{name}' already exists at {task_dir}")
+        raise SystemExit(1)
+
+    task_dir.mkdir(parents=True)
+
+    (task_dir / "__init__.py").write_text("from .task import task  # noqa: F401\n")
+
+    (task_dir / "task.py").write_text(
+        "from pathlib import Path\n"
+        "\n"
+        "from hud.types import MCPToolCall\n"
+        "from env import bug_fix\n"
+        "\n"
+        'WORKSPACE = "/home/ubuntu/workspace/repo"\n'
+        "\n"
+        "task = bug_fix.task(\n"
+        '    prompt="TODO: detailed task prompt",\n'
+        f'    source_repo="TODO",\n'
+        f'    branch_prefix="{name}",\n'
+        '    test_files=["test.py"],\n'
+        ")\n"
+        f'task.slug = "{name}"\n'
+        "task.validation = [\n"
+        '    MCPToolCall(name="bash", arguments={\n'
+        """        "command": f"cd {WORKSPACE} && git apply <<'GOLDEN_PATCH'\\n"\n"""
+        """        + (Path(__file__).parent / "golden.patch").read_text()\n"""
+        """        + "GOLDEN_PATCH",\n"""
+        "    }),\n"
+        "]\n"
+    )
+
+    (task_dir / "golden.patch").write_text("")
+
+    print(f"Created tasks/{name}/")
+    print("  task.py       - edit prompt, source_repo, branch_prefix, test_files")
+    print("  golden.patch  - add golden diff (use generate-golden)")
+
+    raise SystemExit(0)
 
 
 def sync_tasks():
@@ -178,12 +228,48 @@ def sync_tasks():
 
 def generate_golden():
     """Generate a golden.patch file from a GitHub diff between two branches."""
-    from sdlc.cli.generate_golden import generate_golden as _gen
+    import argparse
+    import urllib.request
 
     dotenv = _load_env()
     for key, value in dotenv.items():
         os.environ.setdefault(key, value)
-    _gen(Path(__file__).parent / "tasks")
+
+    parser = argparse.ArgumentParser(description="Generate golden.patch from git diff")
+    parser.add_argument("task_name", help="Task name (writes to tasks/<task_name>/golden.patch)")
+    parser.add_argument("repo_url", help="GitHub repo URL (e.g. https://github.com/org/repo)")
+    parser.add_argument("base", help="Baseline branch name")
+    parser.add_argument("golden", help="Golden branch name")
+    args = parser.parse_args()
+
+    tasks_dir = Path(__file__).parent / "tasks"
+    task_dir = tasks_dir / args.task_name
+    if not task_dir.exists():
+        print(f"Task directory tasks/{args.task_name}/ does not exist. Run new-task first.")
+        raise SystemExit(1)
+
+    parts = args.repo_url.rstrip("/").removesuffix(".git").split("/")
+    owner, repo = parts[-2], parts[-1]
+
+    api_url = f"https://api.github.com/repos/{owner}/{repo}/compare/{args.base}...{args.golden}"
+    req = urllib.request.Request(api_url, headers={"Accept": "application/vnd.github.v3.diff"})
+
+    pat = os.environ.get("SOURCE_GITHUB_PAT")
+    if pat:
+        req.add_header("Authorization", f"token {pat}")
+
+    with urllib.request.urlopen(req) as resp:  # noqa: S310
+        patch = resp.read().decode()
+
+    if not patch.strip():
+        print(f"Empty diff between {args.base}..{args.golden}")
+        raise SystemExit(1)
+
+    patch_path = task_dir / "golden.patch"
+    patch_path.write_text(patch)
+    print(f"Wrote {patch_path}")
+
+    raise SystemExit(0)
 
 
 def validate():

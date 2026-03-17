@@ -23,3 +23,10 @@ task = bug_fix.task(
     linear_data_dir="github_linear_task/linear_data",
 )
 task.slug = "github_linear"
+task.agent_config = {
+    "system_prompt": (
+        "You are a senior software engineer working in a codebase with GitHub and Linear integrations. "
+        "Use the available tools to read tickets, explore the repository, fix bugs, and follow proper "
+        "engineering workflow (branch, commit, PR, update tickets)."
+    ),
+}
