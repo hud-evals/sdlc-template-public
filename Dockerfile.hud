@@ -68,7 +68,6 @@ RUN pip install uv --break-system-packages
 
 # Copy the environment structure
 COPY ./pyproject.toml /mcp_server/pyproject.toml
-COPY ./uv.lock /mcp_server/uv.lock
 WORKDIR /mcp_server
 
 ENV RUST_LOG=warn
